@@ -1,0 +1,262 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.brand {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.phone-link {
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  font-weight: 700;
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.header-cta,
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.hero__badge {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+  background: var(--surface-alt);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.hero__lead,
+.hero__note,
+.pricing__lead {
+  color: var(--muted);
+}
+
+.hero-points {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-5) 0 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.hero-points li {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.7rem;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  padding: 0.65rem 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--accent-strong);
+}
+
+.btn--ghost {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  background: #fff;
+}
+
+.btn--large {
+  padding: 0.85rem 1.25rem;
+}
+
+.card,
+.price-card,
+.lead-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+}
+
+.card,
+.price-card {
+  padding: var(--space-5);
+}
+
+.price-card__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  margin: 0;
+}
+
+.faq-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.faq-list details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+}
+
+.lead-form {
+  padding: var(--space-5);
+}
+
+.lead-form label {
+  display: inline-block;
+  margin: var(--space-3) 0 var(--space-2);
+  font-weight: 600;
+}
+
+.lead-form input,
+.lead-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+}
+
+.lead-form input:focus-visible,
+.lead-form textarea:focus-visible {
+  outline: 2px solid rgba(106, 159, 31, 0.45);
+  outline-offset: 1px;
+}
+
+.checkbox-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: var(--space-3);
+}
+
+.checkbox-row input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.field-error {
+  min-height: 1.2rem;
+  margin: var(--space-2) 0 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+.form-status {
+  min-height: 1.4rem;
+  margin-top: var(--space-3);
+  font-weight: 600;
+}
+
+.form-status--success {
+  color: var(--success);
+}
+
+.form-status--error {
+  color: var(--danger);
+}
+
+.inline-link {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.inline-link--strong {
+  font-size: 1.45rem;
+}
+
+.gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.geo-map {
+  margin: var(--space-4) 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.geo-map iframe {
+  width: 100%;
+  min-height: 340px;
+  border: 0;
+  display: block;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: #f1f7ea;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 8, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 40;
+}
+
+.modal-card {
+  width: min(95vw, 560px);
+  background: var(--surface);
+  border: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+}
+
+.is-hidden {
+  display: none;
+}

@@ -1,0 +1,9 @@
+{
+  "name": "vskroem-vse-landing",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Одностраничный лендинг с mock API на Node.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /
+
+# До подключения боевого домена индексация закрыта.
+# После запуска замените на:
+# User-agent: *
+# Allow: /
+# Sitemap: https://your-domain.tld/sitemap.xml
