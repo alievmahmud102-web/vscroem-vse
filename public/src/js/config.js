@@ -6,9 +6,9 @@ export const CONFIG = {
   PHONE_DISPLAY: "8 (925) 132-20-00",
   PHONE_TEL: "+79251322000",
   VK_URL: "https://vk.com/id1046109493",
-  SITE_URL: "https://example.com",
+  SITE_URL: "https://xn--b1aaibwnmphg.xn--p1ai",
   SITE_IMAGE: "/assets/images/hero-main.png",
-  INDEXING_ENABLED: false,
+  INDEXING_ENABLED: true,
   SERVICE_AREAS: [
     "Москва",
     "Химки",

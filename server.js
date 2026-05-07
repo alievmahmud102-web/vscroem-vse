@@ -4,7 +4,7 @@ const path = require("path");
 
 const HOST = "localhost";
 const PORT = Number(process.env.PORT || 8000);
-const ROOT = __dirname;
+const PUBLIC_ROOT = path.join(__dirname, "public");
 const TELEGRAM_ENABLED = String(process.env.TELEGRAM_ENABLED || "").toLowerCase() === "true";
 const TELEGRAM_BOT_TOKEN = String(process.env.TELEGRAM_BOT_TOKEN || "");
 const TELEGRAM_CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || "");
@@ -172,13 +172,7 @@ async function handleMockApi(req, res) {
       return;
     }
 
-    console.log("[mock lead]", {
-      phone,
-      name,
-      comment,
-      consent,
-      timestamp: timestampIso
-    });
+    console.log("[lead]", { phone, name, comment, consent, timestamp: timestampIso });
 
     await sendTelegramLeadNotification({
       phone,
@@ -203,17 +197,11 @@ function safeJoin(base, target) {
 }
 
 function serveStatic(req, res) {
-  let requested = req.url === "/" ? "/public/index.html" : req.url;
-  if (requested.startsWith("/assets/")) {
-    requested = `/public${requested}`;
-  }
-  if (requested === "/robots.txt" || requested === "/sitemap.xml") {
-    requested = `/public${requested}`;
-  }
-  const cleanUrl = requested.split("?")[0];
-  const filePath = safeJoin(ROOT, decodeURIComponent(cleanUrl));
+  const cleanUrl = req.url.split("?")[0];
+  const requested = cleanUrl === "/" ? "/index.html" : cleanUrl;
+  const filePath = safeJoin(PUBLIC_ROOT, decodeURIComponent(requested));
 
-  if (!filePath.startsWith(ROOT)) {
+  if (!filePath.startsWith(PUBLIC_ROOT)) {
     res.writeHead(403);
     res.end("Forbidden");
     return;

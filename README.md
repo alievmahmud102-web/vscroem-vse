@@ -9,12 +9,12 @@
 ## Структура
 
 - `public/index.html` — главная страница
-- `public/assets/` — изображения, иконки, robots, sitemap
-- `src/css/` — стили (tokens, base, layout, components, utilities)
-- `src/js/` — клиентский код (config, форма, модалка, инициализация)
+- `public/assets/` — изображения, robots, sitemap
+- `public/src/css/` — стили (tokens, base, layout, components, utilities)
+- `public/src/js/` — клиентский код (config, форма, модалка, инициализация)
 - `api/mock.js` — Vercel-функция `POST /api/mock` (валидация и Telegram)
 - `server.js` — локальный Node-сервер для разработки
-- `vercel.json` — роутинг Vercel
+- `vercel.json` — конфиг Vercel
 - `.env.example` — шаблон переменных окружения
 
 ## Локальный запуск
@@ -25,7 +25,7 @@
 npm start
 ```
 
-Откройте: [http://localhost:8000/public/index.html](http://localhost:8000/public/index.html)
+Откройте: [http://localhost:8000](http://localhost:8000)
 
 ## Заявки и Telegram-бот
 
@@ -44,15 +44,15 @@ npm start
 
 ## Как поменять контент
 
-| Что                    | Где                                                |
-| ---------------------- | -------------------------------------------------- |
-| Телефон                | `src/js/config.js` → `PHONE_DISPLAY`, `PHONE_TEL`  |
-| Ссылка VK              | `src/js/config.js` → `VK_URL`                      |
-| Города/география       | `src/js/config.js` → `SERVICE_AREAS`               |
-| Тексты разделов        | `public/index.html`                                |
-| Главное фото (hero)    | `public/assets/images/hero-main.png`               |
-| Галерея                | `public/assets/images/site/site-01..09.jpg`        |
-| Юридический текст      | блок `#policy` в `public/index.html`               |
+| Что                    | Где                                                       |
+| ---------------------- | --------------------------------------------------------- |
+| Телефон                | `public/src/js/config.js` → `PHONE_DISPLAY`, `PHONE_TEL`  |
+| Ссылка VK              | `public/src/js/config.js` → `VK_URL`                      |
+| Города/география       | `public/src/js/config.js` → `SERVICE_AREAS`               |
+| Тексты разделов        | `public/index.html`                                       |
+| Главное фото (hero)    | `public/assets/images/hero-main.png`                      |
+| Галерея                | `public/assets/images/site/site-01..09.jpg`               |
+| Юридический текст      | блок `#policy` в `public/index.html`                      |
 
 ## Деплой
 
