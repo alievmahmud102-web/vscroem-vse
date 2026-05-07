@@ -232,6 +232,8 @@
 }
 
 .captcha-row #captcha-question {
+  display: inline-block;
+  margin-top: 0.35rem;
   font-weight: 700;
   color: var(--accent-strong);
 }
