@@ -6,7 +6,9 @@ function normalizePhone(value) {
 
 function clearErrors(errorNodes) {
   Object.values(errorNodes).forEach((node) => {
-    node.textContent = "";
+    if (node) {
+      node.textContent = "";
+    }
   });
 }
 
@@ -37,6 +39,12 @@ function validateForm({ phone, name, comment, consent }) {
   }
 
   return { errors, normalizedPhone: normalized };
+}
+
+function makeCaptcha() {
+  const a = 1 + Math.floor(Math.random() * 8);
+  const b = 1 + Math.floor(Math.random() * 8);
+  return { a, b };
 }
 
 async function submitLead(payload) {
@@ -78,12 +86,32 @@ export function initLeadForm() {
   const consentInput = document.getElementById("consent");
   const submitButton = document.getElementById("submit-button");
   const statusNode = document.getElementById("form-status");
+  const captchaRow = document.getElementById("captcha-row");
+  const captchaQuestion = document.getElementById("captcha-question");
+  const captchaAnswer = document.getElementById("captcha-answer");
+
   const errorNodes = {
     phone: document.getElementById("phone-error"),
     name: document.getElementById("name-error"),
     comment: document.getElementById("comment-error"),
-    consent: document.getElementById("consent-error")
+    consent: document.getElementById("consent-error"),
+    captcha: document.getElementById("captcha-error")
   };
+
+  let captcha = makeCaptcha();
+
+  const renderCaptcha = () => {
+    if (!captchaRow || !captchaQuestion) {
+      return;
+    }
+    captchaRow.hidden = false;
+    captchaQuestion.textContent = `${captcha.a} + ${captcha.b} = ?`;
+    if (captchaAnswer) {
+      captchaAnswer.value = "";
+    }
+  };
+
+  renderCaptcha();
 
   const setStatus = (text, type = "") => {
     statusNode.textContent = text;
@@ -106,9 +134,20 @@ export function initLeadForm() {
     };
 
     const { errors, normalizedPhone } = validateForm(values);
+
+    const expectedSum = captcha.a + captcha.b;
+    const userAnswer = captchaAnswer ? Number(captchaAnswer.value) : NaN;
+    if (!Number.isFinite(userAnswer) || userAnswer !== expectedSum) {
+      errors.captcha = "Неверный ответ. Решите пример заново.";
+    }
+
     if (Object.keys(errors).length) {
       Object.entries(errors).forEach(([key, message]) => showError(errorNodes, key, message));
       setStatus("Проверьте поля формы и попробуйте снова.", "error");
+      if (errors.captcha) {
+        captcha = makeCaptcha();
+        renderCaptcha();
+      }
       return;
     }
 
@@ -128,14 +167,19 @@ export function initLeadForm() {
         comment: values.comment.trim() || undefined,
         consent: true,
         website: honeypotInput ? honeypotInput.value : "",
-        _formStartedAt: formStartedAt
+        _formStartedAt: formStartedAt,
+        captcha: { a: captcha.a, b: captcha.b, answer: userAnswer }
       };
       const result = await submitLead(payload);
       setStatus(result.message || "Заявка отправлена.", "success");
       localStorage.setItem(CONFIG.LEAD_LAST_SUBMIT_KEY, String(Date.now()));
       form.reset();
+      captcha = makeCaptcha();
+      renderCaptcha();
     } catch (error) {
       setStatus(error.message || "Произошла ошибка при отправке.", "error");
+      captcha = makeCaptcha();
+      renderCaptcha();
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = "Отправить заявку";

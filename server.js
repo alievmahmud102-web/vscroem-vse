@@ -183,6 +183,14 @@ async function handleMockApi(req, res) {
       return;
     }
 
+    if (!leadAntispam.captchaValid(payload)) {
+      sendJson(res, 422, {
+        ok: false,
+        message: "Неверный ответ на проверочный пример. Решите его заново."
+      });
+      return;
+    }
+
     const phone = normalizePhone(payload.phone);
     const consent = Boolean(payload.consent);
     const name = String(payload.name || "").trim();

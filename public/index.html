@@ -359,6 +359,14 @@
           </label>
           <p class="field-error" id="consent-error" aria-live="polite"></p>
 
+          <div class="captcha-row" id="captcha-row" hidden>
+            <label for="captcha-answer">
+              Подтвердите, что вы не робот: <span id="captcha-question" aria-live="polite"></span>
+            </label>
+            <input id="captcha-answer" name="captcha-answer" type="number" inputmode="numeric" autocomplete="off" min="0" max="99">
+          </div>
+          <p class="field-error" id="captcha-error" aria-live="polite"></p>
+
           <button class="btn btn--primary btn--large" type="submit" id="submit-button">Отправить заявку</button>
           <p class="form-status" id="form-status" aria-live="polite"></p>
         </form>
