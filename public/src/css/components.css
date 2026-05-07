@@ -238,6 +238,14 @@
 
 .captcha-row input {
   max-width: 8rem;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.captcha-row input::-webkit-outer-spin-button,
+.captcha-row input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .field-error {
