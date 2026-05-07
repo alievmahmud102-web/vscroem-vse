@@ -27,11 +27,16 @@
 }
 
 .cards-grid,
-.pricing-grid,
-.gallery-grid {
+.pricing-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
 }
 
 .steps {
@@ -68,10 +73,6 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .gallery-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .contact {
     grid-template-columns: 1fr 1fr;
     align-items: start;
@@ -80,6 +81,6 @@
 
 @media (min-width: 1040px) {
   .gallery-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }

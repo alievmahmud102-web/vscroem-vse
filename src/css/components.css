@@ -200,13 +200,70 @@
   font-size: 1.45rem;
 }
 
-.gallery-grid img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.gallery-featured {
+  margin-bottom: var(--space-4);
+}
+
+.gallery-link {
+  display: block;
   border-radius: var(--radius-sm);
+  overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+}
+
+.gallery-link:focus-visible {
+  outline: 3px solid rgba(106, 159, 31, 0.45);
+  outline-offset: 2px;
+}
+
+.gallery-link img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-link--featured img {
+  aspect-ratio: 16 / 9;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 20, 8, 0.86);
+  padding: 1rem;
+  z-index: 55;
+}
+
+.lightbox__image {
+  max-width: min(96vw, 980px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.lightbox__close {
+  position: fixed;
+  top: 0.8rem;
+  right: 0.8rem;
+  border: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.lightbox-open {
+  overflow: hidden;
 }
 
 .geo-map {

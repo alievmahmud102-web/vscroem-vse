@@ -227,9 +227,70 @@ function initYear() {
   }
 }
 
+function initGalleryLightbox() {
+  const lightbox = document.getElementById("gallery-lightbox");
+  const lightboxImage = document.getElementById("gallery-lightbox-image");
+  const closeButton = document.getElementById("gallery-lightbox-close");
+  const galleryLinks = Array.from(document.querySelectorAll("[data-gallery-image]"));
+  if (!lightbox || !lightboxImage || !closeButton || galleryLinks.length === 0) {
+    return;
+  }
+
+  let lastActiveElement = null;
+
+  const closeLightbox = () => {
+    lightbox.classList.add("is-hidden");
+    lightboxImage.setAttribute("src", "");
+    lightboxImage.setAttribute("alt", "");
+    document.body.classList.remove("lightbox-open");
+    document.removeEventListener("keydown", handleKeydown);
+    if (lastActiveElement && typeof lastActiveElement.focus === "function") {
+      lastActiveElement.focus();
+    }
+    lastActiveElement = null;
+  };
+
+  const openLightbox = (link) => {
+    const fullSrc = link.getAttribute("href");
+    const imageNode = link.querySelector("img");
+    const imageAlt = imageNode ? imageNode.getAttribute("alt") || "" : "";
+    if (!fullSrc) {
+      return;
+    }
+    lastActiveElement = link;
+    lightboxImage.setAttribute("src", fullSrc);
+    lightboxImage.setAttribute("alt", imageAlt);
+    lightbox.classList.remove("is-hidden");
+    document.body.classList.add("lightbox-open");
+    document.addEventListener("keydown", handleKeydown);
+    closeButton.focus();
+  };
+
+  function handleKeydown(event) {
+    if (event.key === "Escape") {
+      closeLightbox();
+    }
+  }
+
+  galleryLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openLightbox(link);
+    });
+  });
+
+  closeButton.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  });
+}
+
 applyConfig();
 applySeoConfig();
 initYear();
 initAnchorsWithOffset();
+initGalleryLightbox();
 initFirstVisitModal();
 initLeadForm();
