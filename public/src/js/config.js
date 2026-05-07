@@ -7,7 +7,7 @@ export const CONFIG = {
   PHONE_TEL: "+74958856620",
   VK_URL: "https://vk.com/id1046109493",
   SITE_URL: "https://example.com",
-  SITE_IMAGE: "/assets/images/gallery/optimized/stock-lock-01.jpg",
+  SITE_IMAGE: "/assets/images/site/site-01.jpg",
   INDEXING_ENABLED: false,
   SERVICE_AREAS: [
     "Лобня",
