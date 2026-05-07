@@ -10,6 +10,7 @@
 - `src/js/modal.js` — модалка первого входа (localStorage + a11y)
 - `src/js/form.js` — валидация формы и отправка на dev endpoint
 - `server.js` — локальный Node-сервер для статики и mock API
+- `api/mock.js` — обработчик `POST /api/mock` для деплоя на Vercel (логика совпадает с локальным API)
 - `.env.example` — плейсхолдеры конфигурации на будущее
 
 ## Локальный запуск
@@ -45,7 +46,7 @@ npm start
 ```json
 {
   "ok": true,
-  "message": "Заявка принята (dev mock)."
+  "message": "Заявка принята."
 }
 ```
 
@@ -94,6 +95,8 @@ npm start
 - `TELEGRAM_BOT_TOKEN` — токен бота от `@BotFather`
 - `TELEGRAM_CHAT_ID` — chat id чата/лички, куда приходят заявки
 - `SITE_URL` — источник заявки в уведомлении (если пусто, используется host из запроса)
+
+На Vercel добавьте те же переменные в **Settings → Environment Variables** для Production (и при необходимости Preview). Роут `/api/mock` обслуживается файлом `api/mock.js`.
 
 Если Telegram недоступен или env не заполнены, форма не падает: пользователь всё равно получает успешный ответ по заявке.
 

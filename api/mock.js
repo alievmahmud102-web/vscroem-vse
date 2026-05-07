@@ -1,27 +1,8 @@
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
-
-const HOST = "localhost";
-const PORT = Number(process.env.PORT || 8000);
-const ROOT = __dirname;
-const TELEGRAM_ENABLED = String(process.env.TELEGRAM_ENABLED || "").toLowerCase() === "true";
+const TELEGRAM_ENABLED =
+  String(process.env.TELEGRAM_ENABLED || "").toLowerCase() === "true";
 const TELEGRAM_BOT_TOKEN = String(process.env.TELEGRAM_BOT_TOKEN || "");
 const TELEGRAM_CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || "");
 const SITE_URL = String(process.env.SITE_URL || "").trim();
-
-const MIME_TYPES = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".webp": "image/webp",
-  ".ico": "image/x-icon"
-};
 
 function sendJson(res, statusCode, payload) {
   const body = JSON.stringify(payload);
@@ -66,9 +47,9 @@ function resolveLeadSource(req) {
   if (SITE_URL) {
     return SITE_URL;
   }
-  const host = String(req.headers.host || `${HOST}:${PORT}`);
-  const protoHeader = String(req.headers["x-forwarded-proto"] || "");
-  const protocol = protoHeader.split(",")[0].trim() || "http";
+  const host = String(req.headers.host || "");
+  const protoHeader = String(req.headers["x-forwarded-proto"] || "https");
+  const protocol = protoHeader.split(",")[0].trim() || "https";
   return `${protocol}://${host}`;
 }
 
@@ -94,7 +75,9 @@ async function sendTelegramLeadNotification(leadData) {
   }
 
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.warn("[telegram] TELEGRAM_ENABLED=true, но TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не заполнены.");
+    console.warn(
+      "[telegram] TELEGRAM_ENABLED=true, но TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не заполнены."
+    );
     return;
   }
 
@@ -135,7 +118,7 @@ async function sendTelegramLeadNotification(leadData) {
   }
 }
 
-async function handleMockApi(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method === "OPTIONS") {
     res.writeHead(204, {
       "Access-Control-Allow-Origin": "*",
@@ -163,16 +146,22 @@ async function handleMockApi(req, res) {
     const timestampIso = new Date().toISOString();
 
     if (phone.length < 10) {
-      sendJson(res, 422, { ok: false, message: "Введите корректный номер телефона." });
+      sendJson(res, 422, {
+        ok: false,
+        message: "Введите корректный номер телефона."
+      });
       return;
     }
 
     if (!consent) {
-      sendJson(res, 422, { ok: false, message: "Требуется согласие на обработку данных." });
+      sendJson(res, 422, {
+        ok: false,
+        message: "Требуется согласие на обработку данных."
+      });
       return;
     }
 
-    console.log("[mock lead]", {
+    console.log("[lead]", {
       phone,
       name,
       comment,
@@ -195,52 +184,4 @@ async function handleMockApi(req, res) {
       message: "Некорректный JSON."
     });
   }
-}
-
-function safeJoin(base, target) {
-  const targetPath = "." + path.normalize(target).replace(/^(\.\.[/\\])+/, "");
-  return path.join(base, targetPath);
-}
-
-function serveStatic(req, res) {
-  let requested = req.url === "/" ? "/public/index.html" : req.url;
-  if (requested.startsWith("/assets/")) {
-    requested = `/public${requested}`;
-  }
-  if (requested === "/robots.txt" || requested === "/sitemap.xml") {
-    requested = `/public${requested}`;
-  }
-  const cleanUrl = requested.split("?")[0];
-  const filePath = safeJoin(ROOT, decodeURIComponent(cleanUrl));
-
-  if (!filePath.startsWith(ROOT)) {
-    res.writeHead(403);
-    res.end("Forbidden");
-    return;
-  }
-
-  fs.stat(filePath, (statErr, stats) => {
-    if (statErr || !stats.isFile()) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-      res.end("Not Found");
-      return;
-    }
-
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || "application/octet-stream";
-    res.writeHead(200, { "Content-Type": contentType });
-    fs.createReadStream(filePath).pipe(res);
-  });
-}
-
-const server = http.createServer((req, res) => {
-  if (req.url && req.url.startsWith("/api/mock")) {
-    handleMockApi(req, res);
-    return;
-  }
-  serveStatic(req, res);
-});
-
-server.listen(PORT, HOST, () => {
-  console.log(`Server running at http://${HOST}:${PORT}`);
-});
+};

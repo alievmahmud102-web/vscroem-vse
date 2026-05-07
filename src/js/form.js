@@ -48,7 +48,15 @@ async function submitLead(payload) {
     body: JSON.stringify(payload)
   });
 
-  const data = await response.json();
+  const raw = await response.text();
+  let data;
+  try {
+    data = raw ? JSON.parse(raw) : {};
+  } catch {
+    throw new Error(
+      "Сервер вернул неожиданный ответ. Попробуйте позже или напишите в Telegram / позвоните."
+    );
+  }
   if (!response.ok || !data.ok) {
     throw new Error(data.message || "Не удалось отправить заявку.");
   }
