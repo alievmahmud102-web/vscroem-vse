@@ -328,9 +328,21 @@ body.lightbox-open {
 
 .geo-map iframe {
   width: 100%;
-  min-height: 340px;
+  min-height: 372px;
+  margin-bottom: -32px;
   border: 0;
   display: block;
+}
+
+.geo-attribution {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.geo-attribution a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .site-footer {
