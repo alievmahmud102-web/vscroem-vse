@@ -84,9 +84,8 @@ function applySeoConfig() {
   const siteUrl = normalizeSiteUrl(CONFIG.SITE_URL || "https://example.com");
   const canonicalUrl = `${siteUrl}/`;
   const imageUrl = resolveAbsoluteUrl(siteUrl, CONFIG.SITE_IMAGE);
-  const cityForText = CONFIG.GEO_CITY_NOMINATIVE || CONFIG.GEO_CITY;
-  const title = `${CONFIG.BRAND_NAME} - вскрытие и ремонт замков в ${cityForText} 24/7`;
-  const description = `Срочный выезд мастера по вскрытию и ремонту замков в ${cityForText} и рядом. Консультация по телефону, аккуратная работа, сервис 24/7.`;
+  const title = `${CONFIG.BRAND_NAME} - вскрытие и ремонт замков 24/7`;
+  const description = "Срочный выезд мастера по вскрытию и ремонту замков. При предоставлении фото или видео заранее называем точную стоимость.";
   const robotsContent = CONFIG.INDEXING_ENABLED ? "index, follow, max-image-preview:large" : "noindex, nofollow";
 
   document.title = title;
@@ -163,7 +162,7 @@ function applySeoConfig() {
     ],
     address: {
       "@type": "PostalAddress",
-      addressLocality: cityForText,
+      addressLocality: CONFIG.GEO_CITY_NOMINATIVE || CONFIG.GEO_CITY,
       addressRegion: CONFIG.GEO_REGION,
       addressCountry: "RU"
     }

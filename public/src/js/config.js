@@ -1,7 +1,7 @@
 export const CONFIG = {
   BRAND_NAME: "Вскроем все",
-  GEO_CITY: "Лобне",
-  GEO_CITY_NOMINATIVE: "Лобня",
+  GEO_CITY: "регионе",
+  GEO_CITY_NOMINATIVE: "регион",
   GEO_REGION: "Московская область",
   PHONE_DISPLAY: "8 (495) 885-66-20",
   PHONE_TEL: "+74958856620",
@@ -10,14 +10,14 @@ export const CONFIG = {
   SITE_IMAGE: "/assets/images/site/site-01.jpg",
   INDEXING_ENABLED: false,
   SERVICE_AREAS: [
-    "Лобня",
-    "Катюшки",
-    "Красная Поляна",
-    "Букино",
-    "Депо",
-    "Шереметьевский",
+    "Москва",
     "Химки",
-    "Долгопрудный"
+    "Долгопрудный",
+    "Мытищи",
+    "Красногорск",
+    "Реутов",
+    "Одинцово",
+    "Балашиха"
   ],
   MESSENGER_URLS: {
     telegram: "",
