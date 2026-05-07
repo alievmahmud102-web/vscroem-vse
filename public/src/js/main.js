@@ -62,10 +62,16 @@ function applyConfig() {
 
   const serviceAreasList = document.getElementById("service-areas-list");
   if (serviceAreasList && Array.isArray(CONFIG.SERVICE_AREAS) && CONFIG.SERVICE_AREAS.length > 0) {
+    const highlighted = new Set(
+      Array.isArray(CONFIG.HIGHLIGHTED_AREAS) ? CONFIG.HIGHLIGHTED_AREAS : []
+    );
     serviceAreasList.innerHTML = "";
     CONFIG.SERVICE_AREAS.forEach((area) => {
       const item = document.createElement("li");
       item.textContent = area;
+      if (highlighted.has(area)) {
+        item.classList.add("is-highlighted");
+      }
       serviceAreasList.appendChild(item);
     });
   }

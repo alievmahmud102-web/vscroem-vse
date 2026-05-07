@@ -99,6 +99,18 @@
   box-shadow: 0 6px 14px rgba(83, 126, 23, 0.16);
 }
 
+.hero-points--compact li.is-highlighted {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-strong) 100%);
+  border-color: var(--accent-strong);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(83, 126, 23, 0.3);
+}
+
+.hero-points--compact li.is-highlighted:hover {
+  box-shadow: 0 10px 22px rgba(83, 126, 23, 0.36);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
