@@ -43,5 +43,8 @@ export const CONFIG = {
   },
   METRIKA_PLACEHOLDER: "",
   API_ENDPOINT: "/api/mock",
-  MODAL_STORAGE_KEY: "vskroemvse-modal-shown-v1"
+  MODAL_STORAGE_KEY: "vskroemvse-modal-shown-v1",
+  /** Пауза между отправками формы с одного устройства (мс) */
+  LEAD_COOLDOWN_MS: 45000,
+  LEAD_LAST_SUBMIT_KEY: "vskroemvse-lead-last-ts"
 };

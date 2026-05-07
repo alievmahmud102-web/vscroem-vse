@@ -4,6 +4,15 @@ const TELEGRAM_BOT_TOKEN = String(process.env.TELEGRAM_BOT_TOKEN || "");
 const TELEGRAM_CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || "");
 const SITE_URL = String(process.env.SITE_URL || "").trim();
 
+const leadAntispam = require("../lib/leadAntispam");
+
+function getKvStore() {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    return require("@vercel/kv").kv;
+  }
+  return null;
+}
+
 function sendJson(res, statusCode, payload) {
   const body = JSON.stringify(payload);
   res.writeHead(statusCode, {
@@ -139,6 +148,21 @@ module.exports = async function handler(req, res) {
 
   try {
     const payload = await parseRequestBody(req);
+
+    if (leadAntispam.honeypotFilled(payload)) {
+      console.warn("[antispam] honeypot triggered");
+      sendJson(res, 200, { ok: true, message: "Заявка принята." });
+      return;
+    }
+
+    if (!leadAntispam.minTimeOk(payload)) {
+      sendJson(res, 422, {
+        ok: false,
+        message: "Подождите несколько секунд и отправьте форму снова."
+      });
+      return;
+    }
+
     const phone = normalizePhone(payload.phone);
     const consent = Boolean(payload.consent);
     const name = String(payload.name || "").trim();
@@ -159,6 +183,20 @@ module.exports = async function handler(req, res) {
         message: "Требуется согласие на обработку данных."
       });
       return;
+    }
+
+    const store = getKvStore();
+    if (store) {
+      const ip = leadAntispam.getClientIp(req);
+      const rl = await leadAntispam.enforceRateLimit(store, ip, phone);
+      if (!rl.ok) {
+        sendJson(res, rl.code, { ok: false, message: rl.message });
+        return;
+      }
+    } else {
+      console.warn(
+        "[antispam] KV_REST_API_URL / KV_REST_API_TOKEN не заданы — серверный лимит заявок (3 за 24 ч) на проде отключён. Подключите Vercel KV / Redis."
+      );
     }
 
     console.log("[lead]", {

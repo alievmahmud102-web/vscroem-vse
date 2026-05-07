@@ -1,0 +1,8 @@
+Антиспам для формы: honeypot, время, KV-лимиты IP/телефона
+
+- lib/leadAntispam.js: до 3 заявок за 24ч по IP и по телефону; 4-я → бан на 24ч
+- api/mock.js + server.js: honeypot (тихий 200), min 2.5с до отправки, enforceRateLimit
+- @vercel/kv на проде при KV_REST_API_URL/TOKEN; без KV — предупреждение в логе
+- server.js без KV: in-memory счётчики для локальной проверки
+- форма: honeypot-поле, _formStartedAt, пауза 45с между отправками (config)
+- README и .env.example: инструкция по Redis/KV

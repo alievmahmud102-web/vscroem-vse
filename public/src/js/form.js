@@ -69,6 +69,9 @@ export function initLeadForm() {
     return;
   }
 
+  const formStartedAt = Date.now();
+  const honeypotInput = document.getElementById("lead-honeypot");
+
   const phoneInput = document.getElementById("phone");
   const nameInput = document.getElementById("name");
   const commentInput = document.getElementById("comment");
@@ -109,6 +112,12 @@ export function initLeadForm() {
       return;
     }
 
+    const lastTs = Number(localStorage.getItem(CONFIG.LEAD_LAST_SUBMIT_KEY) || "0");
+    if (lastTs && Date.now() - lastTs < CONFIG.LEAD_COOLDOWN_MS) {
+      setStatus("Подождите немного перед повторной отправкой.", "error");
+      return;
+    }
+
     submitButton.disabled = true;
     submitButton.textContent = "Отправляем...";
 
@@ -117,10 +126,13 @@ export function initLeadForm() {
         phone: normalizedPhone,
         name: values.name.trim() || undefined,
         comment: values.comment.trim() || undefined,
-        consent: true
+        consent: true,
+        website: honeypotInput ? honeypotInput.value : "",
+        _formStartedAt: formStartedAt
       };
       const result = await submitLead(payload);
       setStatus(result.message || "Заявка отправлена.", "success");
+      localStorage.setItem(CONFIG.LEAD_LAST_SUBMIT_KEY, String(Date.now()));
       form.reset();
     } catch (error) {
       setStatus(error.message || "Произошла ошибка при отправке.", "error");

@@ -10,6 +10,18 @@ const TELEGRAM_BOT_TOKEN = String(process.env.TELEGRAM_BOT_TOKEN || "");
 const TELEGRAM_CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || "");
 const SITE_URL = String(process.env.SITE_URL || "").trim();
 
+const leadAntispam = require("./lib/leadAntispam");
+
+function getRateStoreForServer() {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    return require("@vercel/kv").kv;
+  }
+  if (!global.__leadRateMem) {
+    global.__leadRateMem = leadAntispam.createMemoryStore();
+  }
+  return global.__leadRateMem;
+}
+
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -156,6 +168,21 @@ async function handleMockApi(req, res) {
 
   try {
     const payload = await parseRequestBody(req);
+
+    if (leadAntispam.honeypotFilled(payload)) {
+      console.warn("[antispam] honeypot triggered");
+      sendJson(res, 200, { ok: true, message: "Заявка принята." });
+      return;
+    }
+
+    if (!leadAntispam.minTimeOk(payload)) {
+      sendJson(res, 422, {
+        ok: false,
+        message: "Подождите несколько секунд и отправьте форму снова."
+      });
+      return;
+    }
+
     const phone = normalizePhone(payload.phone);
     const consent = Boolean(payload.consent);
     const name = String(payload.name || "").trim();
@@ -169,6 +196,14 @@ async function handleMockApi(req, res) {
 
     if (!consent) {
       sendJson(res, 422, { ok: false, message: "Требуется согласие на обработку данных." });
+      return;
+    }
+
+    const store = getRateStoreForServer();
+    const ip = leadAntispam.getClientIp(req);
+    const rl = await leadAntispam.enforceRateLimit(store, ip, phone);
+    if (!rl.ok) {
+      sendJson(res, rl.code, { ok: false, message: rl.message });
       return;
     }
 
